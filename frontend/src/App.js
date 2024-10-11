@@ -1,19 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import RecipeCard from './RecipeCard'; // Make sure this file exists and is correct
-import './styles.css';
+import RecipeCard from './components/RecipeCard';
 
-const App = () => {
+function App() {
     const [recipes, setRecipes] = useState([]);
 
     useEffect(() => {
         const fetchRecipes = async () => {
-            const response = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s='); // Ensure this endpoint is valid
-            const data = await response.json();
-            setRecipes(data.meals); // Ensure data.meals is not undefined
+            try {
+                const response = await fetch('http://localhost:5000/api/recipes'); // Adjusted for Flask backend
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setRecipes(data.meals || []); // Assuming the response structure has a 'meals' array
+            } catch (error) {
+                console.error('Error fetching recipes:', error);
+            }
         };
 
         fetchRecipes();
     }, []);
+    console.log(recipes);
 
     return (
         <div>
@@ -24,13 +31,11 @@ const App = () => {
                         <RecipeCard key={recipe.idMeal} recipe={recipe} />
                     ))
                 ) : (
-                    <p>No recipes found.</p> // Message when there are no recipes
+                    <p>No recipes found.</p>
                 )}
             </div>
         </div>
     );
-};
+}
 
 export default App;
-
-

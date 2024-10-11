@@ -4,9 +4,9 @@ module.exports = {
     mode: 'development',  // Change to 'production' for production builds
     entry: './src/index.js',  // Entry point for your application
     output: {
-        filename: 'main.js',  // Output file name
         path: path.resolve(__dirname, 'dist'),  // Output path
-        clean: true,  // Clean the output directory before emit
+        filename: 'main.js',  // Output file name
+        publicPath: '/',
     },
     module: {
         rules: [
